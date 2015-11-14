@@ -1,0 +1,1 @@
+curl -H "Content-Type: application/json" --data '{"docker_tag": "latest"}' -X POST https://registry.hub.docker.com/u/rc42/lab-tinkserver/trigger/0fe90487-b374-42bf-9cd4-7849aca73ad7/
