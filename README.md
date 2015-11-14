@@ -11,7 +11,7 @@ _A Web Server Template in Flask on Ubuntu & Gunicorn using Docker_
 
 ## Dev Env
 - Docker (Provisioning)
-- BitBucket (Version Control)
+- GitHub (Version Control)
 - AWS (Web Services)
 - - EC2 (Webhosting)
 - - DynamoDB (Account Database)
