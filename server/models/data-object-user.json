@@ -1,0 +1,14 @@
+{
+  "table": {
+    "tableName": "userTable",
+    "primaryKey": "labID",
+    "tableIndexList": [ ]
+  },
+  "record": {
+    "labID": "",
+    "emailAddressList": [ { "emailAddress": "", "labDT": "", "MacID": "", "IPAd": "" } ],
+    "firstNameList": [ { "firstName": "", "labDT": "", "MacID": "", "IPAd": "" } ],
+    "lastNameList": [ { "lastName": "", "labDT": "", "MacID": "", "IPAd": "" } ]
+
+  }
+}
