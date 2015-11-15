@@ -1,0 +1,53 @@
+// WATSON STUFF
+var secAdjustment = 0;
+personality_insights.profile({
+	text: text,
+	language: 'en'},
+	function (err, response) {
+	if (err)
+		console.log('error: ', err);
+	else {
+		console.log("Received response from Watson request");
+
+		// process response
+		/*
+		for (var k=0; k<response.tree.children.length; k++) {
+			var rootChild = response.tree.children[k];
+			if (rootChild.name == "Big 5") {
+				for (var m=0; m<rootChild.children.length; m++) {
+					var category = rootChild.children[m];
+					var perc = category.percentage;
+					if (perc > 0.8)
+						secAdjustment += 1000;
+					else if (perc > 0.6)
+						secAdjustment += 500;
+					else if (perc < 0.2)
+						secAdjustment += -1000;
+					else if (perc < 0.4)
+						secAdjustment += -500;
+
+					console.log(rootChild.children[m].name+": "+secAdjustment);
+				}
+			}
+			else if (rootChild.name == "Values") {
+				for (var m=0; m<rootChild.children.length; m++) {
+					if (rootChild.children[m].name == "Self-enhancement") {
+						var category = rootChild.children[m];
+						var perc = category.percentage;
+						if (perc > 0.8)
+							secAdjustment += 1000;
+						else if (perc > 0.6)
+							secAdjustment += 500;
+						else if (perc < 0.2)
+							secAdjustment += -1000;
+						else if (perc < 0.4)
+							secAdjustment += -500;
+
+						console.log(rootChild.children[m].name+": "+secAdjustment);
+					}
+				}
+			}
+		}
+		*/
+	}
+});

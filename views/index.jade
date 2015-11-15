@@ -7,15 +7,14 @@ block content
 		p(id='results')
 
 		script.
-			$.get('http://localhost:3000/gettweets?consumer_key=ZEX3NKceb1sfXZZUg0AbKguk1&consumer_secret=ikV5BQqyww0FMuTKWyIT0gnXXZiIm2z1fONRLhUanCS7petJtM&user_name=tangydoris&access_token=175783213-TEDc1bO77gX3Kz8Z4444AjWmiIcI04x2WGA3QE45&access_secret=T5O7TNyrWjgWsLLaTFjm2ushHOBKduMOoA1KRBEKbhiYi', function(data) {
-				console.log("Ran from index.jade");
-				console.log(data);
-				console.log("parsing data");
+			var localData;
+			$.get('/gettweets?consumer_key=ZEX3NKceb1sfXZZUg0AbKguk1&consumer_secret=ikV5BQqyww0FMuTKWyIT0gnXXZiIm2z1fONRLhUanCS7petJtM&user_name=tangydoris&access_token=175783213-TEDc1bO77gX3Kz8Z4444AjWmiIcI04x2WGA3QE45&access_secret=T5O7TNyrWjgWsLLaTFjm2ushHOBKduMOoA1KRBEKbhiYi', function(data) {
+				$('#results').append(data.events[0].short_text+'<br>'+data.events[0].time_adj+'<br><br>');
+				$('#results').append(data.events[1].short_text+'<br>'+data.events[1].time_adj+'<br><br>');
+				$('#results').append(data.events[2].short_text+'<br>'+data.events[2].time_adj+'<br><br>');
 				
-				//data = JSON.parse(data);
-				
-				$("#results").append('SUCCESS');
-
+				$('#results').append('Overall time adjustment from personality: '+data.overall_time_adj+' seconds')
 			});
+
 
 			
