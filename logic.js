@@ -5,16 +5,19 @@ var Twitter = require('twitter');
 var watson = require('watson-developer-cloud');
 var async = require('async');
 var moment = require('moment');
+var jsonfile = require('jsonfile');
+var util = require('util');
 
 var alchemy_language = watson.alchemy_language({
-  api_key: 'ecf25707ce4d7d3c200c4bb02dce2cf4edc09455'
+  api_key: 'd66ea59c10caf2532512ae7df47626e9fbc7a3ea'
 });
+
 
 function sentimentAnalysis(tweet, index) {
   return function(callback) {
     alchemy_language.sentiment({text: tweet.text }, function (err, sentiment) {
       if (err) {
-        console.log('error getting sentiment:', err);
+        //console.log('error getting sentiment:', err);
         callback(null, null);
         return
       } else {
@@ -45,6 +48,8 @@ function convertToEpoch(twitterTime) {
 // calculates for every tweet
 function lifeExpectancyCalculator(twit, params, callback) {
   var resultsArray ;
+
+
   twit.get('statuses/user_timeline', params, function(error, tweets, response) {
     //console.log('tweets:',tweets.length);
     if (error) {
@@ -55,6 +60,40 @@ function lifeExpectancyCalculator(twit, params, callback) {
       });
     }
   });
+  
+
+  // var file = '/tweets.json'
+  // jsonfile.readFile(file, function(err, obj) {
+  //   if (err != null) {
+  //     callback(err);
+  //   } else {
+  //     var sents = obj;
+  //     console.log(sents);
+
+  //     callback(null, sents.filter(function (e) { return e !== null }));
+  //     /*
+  //     async.parallel(sents.map(sentimentAnalysis), function(error, results) {
+  //       callback(null, results.filter(function (e) { return e !== null }));
+  //     });
+  //     */
+  //   }
+  // });
+
+  /*
+  var file = './tweets.json'
+  jsonfile.readFile(file, function(err, obj) {
+    if (err != null) {
+      callback(error);
+    } else {
+      var tweets = obj;
+      console.log(tweets);
+      async.parallel(tweets.map(sentimentAnalysis), function(err, results) {
+
+        callback(null, results.filter(function (e) { return e !== null }));
+      });
+    }
+  })
+  */
 }
 
 // use Watson personality insights
@@ -102,7 +141,7 @@ var big5 = function(tree) {
 module.exports = function(req, res, next) {
   var params = {
     screen_name: req.query.user_name, 
-    count: (req.query.count || 100)
+    count: (req.query.count || 200)
   };
   
   var twitter = new Twitter({
@@ -112,17 +151,54 @@ module.exports = function(req, res, next) {
     access_token_secret:    req.query.access_secret,
   });
 
-  lifeExpectancyCalculator(twitter, params, function (error, results) {
-    if (error)
-      res.status(400).json({error: 'there was an error' + error});
-    else {
-      // after calculating insight for every tweet, calculate overall personality
-      var overall_time_adj = personalityCalculator(results, function(err, timeResult){
-        // even if there is an error, timeResult = 0  
-        res.json({events: results, overall_time_adj: timeResult});
-      });
+  // lifeExpectancyCalculator(twitter, params, function (error, results) {
+  //   if (error)
+  //     res.status(400).json({error: 'there was an error' + error});
+  //   else {
+  //     // after calculating insight for every tweet, calculate overall personality
+  //     var overall_time_adj = personalityCalculator(results, function(err, timeResult){
+  //       // even if there is an error, timeResult = 0  
+  //       var file = './sentiments.json';
+  //       jsonfile.writeFile(file, results, function (err) {
+  //         console.error(err)
+  //       });
+  //       res.json({events: results, overall_time_adj: timeResult});
+  //     });
 
       
+  //   }
+  // });
+  var file = './sentiments.json';
+  jsonfile.readFile(file, function(err, obj) {
+    if (err != null) {
+      callback(error);
+    } else {
+      var sentiments = obj;
+      console.log(sentiments);
+
+      personalityCalculator(sentiments, function(err, resp) {
+        res.json({events: sentiments, overall_time_adj: resp});
+      });
+      
+      /*
+      async.parallel(personalityCalculator(sentiments), function(err, results) {
+        res.json({events: sentiments, overall_time_adj: results});
+      });
+      */
+
+      /*
+      twitter.get('statuses/user_timeline', params, function(error, tweets, response) {
+        //console.log('tweets:',tweets.length);
+        if (error) {
+          callback(error);
+        } else {
+          async.parallel(personalityCalculator(sentiments), function(err, results) {
+            res.json({events: sentiments, overall_time_adj: results});
+          });
+        }
+      });
+*/
+      
     }
-  });
+  })
 }
