@@ -30,9 +30,32 @@ if (app.get('env') == 'development') {
 
 
 /**
+ * Watson setup
+ **/
+var watson = require('watson-developer-cloud');
+//var extend = require('util')._extend;
+//var i18n = require('i18next');
+
+//i18n settings
+require('./config/i18n')(app);
+
+// error-handler settings
+//require('./config/error-handler')(app);
+
+// Bootstrap application settings
+//require('./config/express')(app);
+
+// Create the service wrapper
+var personality_insights = watson.personality_insights({
+	version: 'v2',
+	username: 'dab272b3-b5bc-4928-a741-cea73b4d04e0',
+	password: 'FGBkYqWLL4o5'
+});
+
+
+/**
  * Twitter setup
  **/
-//var Twit = require('twit');
 var Twit = require('twitter');
 
 /**
@@ -49,16 +72,15 @@ app.get('/gettweets', function(req, res, next){
 		user_name: query.user_name
 	};
 
-	var params = {screen_name: result.user_name};
+	var params = {screen_name: result.user_name, count: 50};
 
 	console.log("Parsed result");
 	console.log(result);
 
-	//var T = new Twit({
 	var T = new Twit({
 	    consumer_key: 			result.consumer_key,
 	    consumer_secret:    	result.consumer_secret,
-	    access_token_key: 			result.access_token,
+	    access_token_key: 		result.access_token,
 		access_token_secret: 	result.access_secret,
 	});
 
@@ -66,10 +88,26 @@ app.get('/gettweets', function(req, res, next){
 	T.get('statuses/user_timeline', params, function(error, tweets, response){
 		if (!error) {
 			var resultsArray = [];
-			console.log(tweets);
-			for (var tweet in tweets) {
-				console.log(tweet);
+			//console.log(tweets);
+			for (var i=0; i<tweets.length; i++) {
+				var tweet = tweets[i];
+				var text = tweet.text;
+				for (var j=0; j<100; j++)
+					text = text+" of";
+
+				// WATSON STUFF
+				personality_insights.profile({
+					text: text,
+					language: 'en'},
+					function (err, response) {
+					if (err)
+					  console.log('error:', err);
+					else
+					  console.log(JSON.stringify(response, null, 2));
+				});
+				
 			}
+
 			res.json({'events': resultsArray});
 		}
 	});
@@ -77,25 +115,6 @@ app.get('/gettweets', function(req, res, next){
 
 app.get('/', routes.index);
 
-
-
-
-
-
-/**
- * Function to process Twitter Object
- * and send through to IBM Watson 'Personality Insights' API
- **/
- function processTweet(tweet) {
- 	var text = tweet.text;
- }
-
- var options = { screen_name: 'tangydoris',
-                count: 3 };
-
-
 http.createServer(app).listen(app.get('port'), function(){
   	console.log("Express server listening on port " + app.get('port'));
- 
-
 });
