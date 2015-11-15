@@ -2,5 +2,20 @@ extends layout
 
 block content
 	div.container
-		h1 Program Name
-		p Hello World
+		h1 Life Expectancy Predictor
+		<br>
+		p(id='results')
+
+		script.
+			$.get('http://localhost:3000/gettweets?consumer_key=ZEX3NKceb1sfXZZUg0AbKguk1&consumer_secret=ikV5BQqyww0FMuTKWyIT0gnXXZiIm2z1fONRLhUanCS7petJtM&user_name=tangydoris&access_token=175783213-TEDc1bO77gX3Kz8Z4444AjWmiIcI04x2WGA3QE45&access_secret=T5O7TNyrWjgWsLLaTFjm2ushHOBKduMOoA1KRBEKbhiYi', function(data) {
+				console.log("Ran from index.jade");
+				console.log(data);
+				console.log("parsing data");
+				
+				//data = JSON.parse(data);
+				
+				$("#results").append('SUCCESS');
+
+			});
+
+			

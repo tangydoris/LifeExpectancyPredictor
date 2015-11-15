@@ -26,3 +26,4 @@ nbproject
 .idea
 .node_history
 __pycache__
+node_modules
