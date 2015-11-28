@@ -9,7 +9,7 @@ var jsonfile = require('jsonfile');
 var util = require('util');
 
 var alchemy_language = watson.alchemy_language({
-  api_key: 'd66ea59c10caf2532512ae7df47626e9fbc7a3ea'
+  api_key: 'API KEY'
 });
 
 
@@ -98,8 +98,8 @@ function lifeExpectancyCalculator(twit, params, callback) {
 
 // use Watson personality insights
 var personality_insights = watson.personality_insights({
-  username: 'dab272b3-b5bc-4928-a741-cea73b4d04e0',
-  password: 'FGBkYqWLL4o5',
+  username: 'USERNAME',
+  password: 'PASSWORD',
   version: 'v2'
 });
 
